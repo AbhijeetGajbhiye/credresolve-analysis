@@ -1,0 +1,12 @@
+feature,type,treated_value,untreated_value,imbalance,interpretation
+dpd,numeric,56.43152135545358,56.52387605819019,-0.0017187077460838478,June 1-30 common pre-period
+outstanding_amount,numeric,359430.12726085423,347353.67148598674,0.05998303814426054,June 1-30 common pre-period
+principal_amount,numeric,401282.2900264737,403961.5434474398,-0.011716764589877006,June 1-30 common pre-period
+prior_call_attempts,numeric,0.5379456406636075,0.5320128215665324,0.008049007369227274,June 1-30 common pre-period
+prior_contact_rate,numeric,0.19081251794430087,0.19463624338624338,-0.01043479489347002,June 1-30 common pre-period
+prior_audited_cash,numeric,4153.95462407342,4195.922073641818,-0.002062935737709472,June 1-30 common pre-period
+risk_segment,categorical,0.2507942110836569,0.2519520013150325,0.0011577902313755772,max category share difference=HIGH; common June pre-period
+loan_type,categorical,0.2045534768796329,0.19598093202925948,0.008572544850373426,max category share difference=BNPL; common June pre-period
+state,categorical,0.10494191770033472,0.09750999636495819,0.007431921335376526,max category share difference=Rajasthan; common June pre-period
+city,categorical,0.10494191770033472,0.09750999636495819,0.007431921335376526,max category share difference=Jaipur; common June pre-period
+prior_payer,binary,0.05435933639251676,0.05584778499219199,-0.0014884485996752295,June 1-30 common pre-period

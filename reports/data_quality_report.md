@@ -1,126 +1,46 @@
-# Data Quality Report — CredResolve Collections Analytics
+# Data Quality Report
 
-## 1. Overview
+| Issue | Detection | Treatment | Business impact |
+|---|---|---|---|
+| Duplicate payments | 500 duplicate `payment_id` rows | Exact dedupe first; then calculate reference ambiguity | Prevents payment-count inflation and creates a single canonical payment layer |
+| Ambiguous payment references | 3,406 reused/ambiguous references after payment-id dedupe | Exclude ambiguous references from audited recovery; retain in rejected layer | Raw SUCCESS cash ₹134.15 Cr -> audited ₹93.53 Cr |
+| Duplicate calls | 1,350 duplicate `call_id` rows | Remove exact duplicate signatures; retain conflicting IDs with flags | Prevents inflated calling metrics |
+| Duplicate WhatsApp events | 600 duplicate event IDs | Deduplicate by event ID/signature | Prevents inflated digital reach |
+| Borrower identity drift | 30,600 borrower rows collapse to 11,015 borrower IDs; 8,518 IDs have conflicting attributes | Use `account_id` as collection entity; borrower joins optional | Prevents borrower-level misattribution |
+| Account referential integrity | 455 accounts missing borrower ID; 2,913 orphan accounts | Keep accounts; mark demographic joins unavailable | Avoids denominator loss |
+| Agent identity drift | 30,000 agent rows collapse to 1,000 agent IDs | Do not use agent tenure/identity for causal conclusions | Limits agent-level inference |
+| Status timestamps | 30,191 rows have `recorded_at < event_at` | Use `event_at` for business timing; retain `recorded_at` for latency monitoring | Reduces period/hour misclassification |
+| Timezone conflicts | 60,961/91,350 calls differ from vendor timezone | Use row-level timezone consistently | Keeps calling-hour analysis internally consistent |
+| Campaign window mismatch | Events/targets exist outside campaign windows | Do not hard-exclude activity on campaign-window logic | Avoids deleting real collection activity |
+| Cost data | No dependable cost table | Do not invent cost metrics; use budget hurdle analysis | Limits ROI precision |
 
-17 raw tables, ~640K total rows, covering Jan 1 – Aug 8, 2026 (partial). This
-report documents every data-quality issue found, how it was detected, how it
-was treated, and its quantified business impact. Full detection queries are in
-`sql/04_forensics.sql`; the cleaning pipeline is in `pipeline/build_golden_dataset.py`
-(Python) and `sql/01_staging.sql` + `sql/02_golden_dataset.sql` (SQL) — the two
-were built independently and cross-checked against each other for the headline
-metrics (they agree to within rounding).
+## Raw -> corrected -> golden
 
-## 2. Major issues, by forensics category (Part 2, A–G)
+The payment pipeline now applies one deterministic order: **raw payment rows -> exact `payment_id` dedupe -> reference ambiguity classification -> golden/rejected payment layers**. The exported CSV artifacts are generated from that same sequence.
 
-### A. Duplicate payments — CONFIRMED, quantified
-- 486 exact full-row duplicate rows + 14 duplicate `payment_id` collisions =
-  **500 of 25,500 raw payment rows (1.96%)** are ingestion duplicates.
-- Impact: raw SUCCESS-status recovered amount is overstated by ~2% before cleaning.
-- Checked separately for "same account + same amount within 60 minutes but
-  different payment_id" (a retry-with-new-id signature): after removing the
-  exact/ID duplicates above, this check returns **zero** additional cases — the
-  duplicate-payment problem in this dataset IS the exact/ID-duplicate issue, not
-  a separate retry pattern requiring fuzzy matching.
-- Treatment: dropped in golden layer, kept first-seen occurrence.
+## Targeting correction
 
-### B. Attribution errors — CONFIRMED, but different from the hypothesis
-- The `payments` table has **no campaign_id or interaction_id column at all** —
-  any "which channel drove this recovery" attribution must be derived by
-  joining to interaction timestamps. This absence is itself a data-quality
-  finding: today's channel-conversion reporting, whatever method it uses, is an
-  analytical construct layered on top of the raw feed, not a measured fact.
-- We tested the specific hypothesis in the brief (last-touch over-crediting a
-  high-frequency automated channel): on a 3,000-payment sample, last-touch and
-  split multi-touch credit agree within ~1 percentage point per channel.
-  **No material last-touch bias found.**
-- A bigger issue: only **36% of successful payments have any recorded
-  interaction (call/WhatsApp/SMS/field visit) within 14 days beforehand.**
-  Channel-conversion and channel-ROI metrics for the other 64% rest on no
-  observed link at all and should be treated as low-confidence.
+The earlier full-month July payer comparison could count a payment that occurred before the first targeting event. That construction is retained only as a legacy diagnostic and is explicitly excluded from investment decisioning.
 
-### C. Timezone problems — CONFIRMED
-- `calls`, `accounts`, and `agent_sessions` each carry a `timezone` field with
-  three values: UTC, Asia/Kolkata, Asia/Dubai, and timestamps are stored
-  naive-local (not normalized) in the raw feed.
-- Treatment: golden layer converts every timestamp to a canonical UTC value
-  using a fixed offset per zone (+5:30 for Kolkata, +4:00 for Dubai — both
-  exact, since neither India nor the UAE observes daylight saving), while
-  retaining local time for calling-time-of-day analysis.
-- Impact check: with normalization applied, connect rate by hour-of-day is flat
-  (18.1–20.9% in every hour) — timezone misclassification does not appear to be
-  masking a real daypart effect in this dataset, but it would have been
-  impossible to rule that out without the fix.
+The corrected historical signal indexes each July-targeted account at its first target date and uses seven full calendar days before versus seven full calendar days after the target date, **excluding the entire target day** because the source has no target timestamp. In the corrected data, the 7-day payer rate moves by **+0.035 percentage points**. A paired bootstrap gives a 95% descriptive interval of approximately **-0.371 pp to +0.459 pp**. Average audited cash per targeted account is lower post-target; this is descriptive and not causal.
 
-### D. Vendor/disposition code changes — CONFIRMED, different shape than expected
-- `call_dispositions.disposition_code` contains both `PTP` and `PROMISE_TO_PAY`
-  as separate strings for the same outcome — **3,926 rows**, split roughly
-  evenly across all three `disposition_version` values (legacy/v1/v2). This is
-  a labeling inconsistency independent of the version field, not a clean
-  legacy-vs-new cutover.
-- Treatment: canonicalized to `PTP` in the golden layer; raw value retained as
-  `disposition_code_raw` for audit.
+These are observational and can still reflect time trends, regression to the mean, borrower selection, or other confounding. The production design therefore uses a randomized 5-10% holdout.
 
-### E. Agent identity problems — CONFIRMED, severe
-- 1,000 real agents (by `agent_id`, the key every fact table references) are
-  represented by 30,000 raw dimension rows — **14 to 48 snapshot rows per
-  agent**, with `employee_code`, `vendor_id`, `team`, and `name` reshuffled
-  essentially at random between snapshots for the same `agent_id`.
-- **100% of agent_ids** (1,000/1,000) show more than one `employee_code` across
-  their raw rows. `employee_code` is not usable as an identity or dedup key in
-  this feed.
-- Treatment: `agent_id` adopted as the sole entity key; dimension collapsed to
-  one row per `agent_id` via latest-`updated_at` (standard SCD-1), with an
-  explicit flag that pre-collapse attribute history should not be read as real
-  employee movement.
-- The same pattern exists in `borrowers` (11,015 real borrowers behind 30,600
-  raw rows, 1–11 inconsistent snapshots each) and was treated the same way.
+## Investment hurdle
 
-### F. Portfolio mix changes — TESTED, NOT FOUND
-- Monthly composition of targeted accounts by `risk_segment`, `dpd_bucket`, and
-  `loan_type` is flat within 1–2 percentage points every month (see
-  `golden_dataset/golden_driver_*.csv`). **No evidence of a portfolio
-  acquisition or mix shift** during the observed window.
+The annualized addressable population is 67,104 target account-month opportunities. Using July audited recovery per payer **among targeted July accounts**, a ₹10 Cr annual return requires approximately **1.91 percentage points of incremental payer lift**. Historical observational data does not establish that hurdle.
 
-### G. Denominator manipulation — TESTED, NOT FOUND
-- Monthly mix of `daily_targeting.status` (CONTACTED / EXPIRED / QUEUED /
-  SKIPPED) holds at roughly 25% each, every month. **No evidence that
-  unsuccessful accounts are being progressively excluded** from the population
-  used to compute rates.
-- A different, unrelated denominator issue **was** found and is the single
-  most actionable finding in this report — see next section.
+## Statistical investigation coverage
+See `reports/Statistical_Investigation.md` for explicit treatment of mix, cohort, selection, survivorship/denominator manipulation, Simpson's paradox, attribution-window bias and time-series effects.
 
-## 3. The coverage gap (new finding, not in the original A–G checklist)
+## Requested metric governance
+See `reports/Metric_Dictionary.md`. Contact rate is calculated at the call-attempt grain; RPC/PTP use normalized disposition definitions; PTP kept is a promised-date cohort metric; recovery/yield uses targeted-account cash; and channel conversion uses the next 7 full calendar days after a target date with the target date excluded because target timestamps are unavailable. Cost per ₹ recovered is deliberately not calculated because no dependable cost table was supplied.
 
-**6,656 of 30,000 accounts (22.2%, ₹231.1 crore of outstanding balance) never
-appear in `daily_targeting` at all**, in the entire observed window. These
-accounts are statistically indistinguishable from the worked book on account
-status mix, risk segment mix, average DPD (56.3 vs 56.6 days), and average
-outstanding balance (₹347K vs ₹350K). This is not a data-quality *error* so
-much as an operational blind spot the data quality investigation surfaced —
-see the Executive Memo for the resulting investment recommendation.
+## Statistical investigation coverage
+See `reports/Statistical_Investigation.md` for explicit treatment of mix, cohort, selection, survivorship/denominator manipulation, Simpson's paradox, attribution-window bias and time-series effects.
 
-## 4. Issues investigated and explicitly ruled out
+## Requested metric governance
+See `reports/Metric_Dictionary.md`. Contact rate is calculated at the call-attempt grain; RPC/PTP use normalized disposition definitions; PTP kept is a promised-date cohort metric; recovery/yield uses targeted-account cash; and channel conversion uses the next 7 full calendar days after a target date with the target date excluded because target timestamps are unavailable. Cost per ₹ recovered is deliberately not calculated because no dependable cost table was supplied.
 
-| Hypothesis | Result |
-|---|---|
-| Portfolio mix shift explains the "11% improvement" | Ruled out — mix is flat (Section F) |
-| Denominator shrinkage inflates conversion rates over time | Ruled out — targeting status mix is flat (Section G) |
-| Last-touch attribution over-credits automated channels | Ruled out — last-touch ≈ multi-touch credit (Section B) |
-| Calling-hour or attempt-number effects are hidden by timezone noise | Ruled out — flat even after UTC normalization |
-| Agent tenure affects connect rate | Ruled out — the only two populated tenure bands are statistically identical |
-
-## 5. What the 11% actually is
-
-See `notebook/analysis.ipynb` Section 4 for the full derivation. In short:
-raw SUCCESS-status recovery amount rose from ₹174.1M (February, 28 days) to
-₹193.2M (March, 31 days) — a **+10.99%** raw month-over-month change that
-matches the reported figure almost exactly. Normalized to recovery-per-day,
-the same comparison shows **+0.29%**. Every month in the window shows the same
-pattern: raw totals swing ±5–11% purely from day-count differences, while
-per-day figures stay in a ₹5.8–6.1M/day band with no trend.
-
-**Recommendation for reporting going forward:** never compare raw monthly
-totals month-over-month in this business without day-count normalization, and
-prefer a 3-month rolling average of the per-day metric for the headline
-leadership number, since single-month comparisons are dominated by calendar
-noise larger than the real signal being measured.
+## Observation-window limitation
+The supplied extracts cover 2026-01-01 through 2026-08-12: seven complete months (Jan-Jul) plus partial August. The assignment asks for approximately 12 months, but the supplied data does not contain a full 12-month history. No annual seasonality conclusion is therefore made.

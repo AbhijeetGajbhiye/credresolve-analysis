@@ -1,6 +1,4 @@
-credresolve.db
-*.pyc
+pipeline/build/
 __pycache__/
-.ipynb_checkpoints/
-*_preview.png
-node_modules/
+*.pyc
+.DS_Store

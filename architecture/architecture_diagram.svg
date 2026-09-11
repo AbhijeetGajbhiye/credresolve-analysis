@@ -1,126 +1,143 @@
-<svg viewBox="0 0 1500 630" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Sans, Arial, sans-serif">
-<defs>
-  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-    <path d="M0,0 L10,5 L0,10 z" fill="#5B6778"/>
-  </marker>
-  <marker id="arrowTeal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-    <path d="M0,0 L10,5 L0,10 z" fill="#2F6F62"/>
-  </marker>
-</defs>
-<rect width="1500" height="630" fill="#F2F4F7"/>
-<text x="40" y="45" font-size="22" font-weight="600" fill="#16233B">CredResolve Collections Analytics — Production Architecture</text>
-<text x="40" y="68" font-size="13" fill="#5B6778">Raw &#8594; Staging &#8594; Clean &#8594; Golden &#8594; Feature &#8594; Metrics &#8594; Dashboard, with orchestration, data-quality gates, and monitoring wrapped around every stage</text>
-<rect x="30" y="110" width="175" height="62" rx="4" fill="#FFFFFF" stroke="#B7C0CE" stroke-width="1.4"/>
-<text x="117.5" y="127.5" font-size="11.5" font-weight="600" fill="#16233B" text-anchor="middle">Telephony / Dialer</text>
-<text x="117.5" y="144.5" font-size="11.5" font-weight="600" fill="#16233B" text-anchor="middle">(calls, attempts,</text>
-<text x="117.5" y="161.5" font-size="11.5" font-weight="600" fill="#16233B" text-anchor="middle">dispositions)</text>
-<line x1="205" y1="141.0" x2="250" y2="250" stroke="141.0" stroke-width="1.6" marker-end="url(#arrow)"/>
-<rect x="30" y="186" width="175" height="62" rx="4" fill="#FFFFFF" stroke="#B7C0CE" stroke-width="1.4"/>
-<text x="117.5" y="203.5" font-size="11.5" font-weight="600" fill="#16233B" text-anchor="middle">Core Banking / LMS</text>
-<text x="117.5" y="220.5" font-size="11.5" font-weight="600" fill="#16233B" text-anchor="middle">(accounts,</text>
-<text x="117.5" y="237.5" font-size="11.5" font-weight="600" fill="#16233B" text-anchor="middle">borrowers)</text>
-<line x1="205" y1="217.0" x2="250" y2="250" stroke="217.0" stroke-width="1.6" marker-end="url(#arrow)"/>
-<rect x="30" y="262" width="175" height="62" rx="4" fill="#FFFFFF" stroke="#B7C0CE" stroke-width="1.4"/>
-<text x="117.5" y="288.0" font-size="11.5" font-weight="600" fill="#16233B" text-anchor="middle">Payments Gateway</text>
-<text x="117.5" y="305.0" font-size="11.5" font-weight="600" fill="#16233B" text-anchor="middle">(payments)</text>
-<line x1="205" y1="293.0" x2="250" y2="250" stroke="293.0" stroke-width="1.6" marker-end="url(#arrow)"/>
-<rect x="30" y="338" width="175" height="62" rx="4" fill="#FFFFFF" stroke="#B7C0CE" stroke-width="1.4"/>
-<text x="117.5" y="364.0" font-size="11.5" font-weight="600" fill="#16233B" text-anchor="middle">WhatsApp / SMS</text>
-<text x="117.5" y="381.0" font-size="11.5" font-weight="600" fill="#16233B" text-anchor="middle">Gateways</text>
-<line x1="205" y1="369.0" x2="250" y2="250" stroke="369.0" stroke-width="1.6" marker-end="url(#arrow)"/>
-<rect x="30" y="414" width="175" height="62" rx="4" fill="#FFFFFF" stroke="#B7C0CE" stroke-width="1.4"/>
-<text x="117.5" y="440.0" font-size="11.5" font-weight="600" fill="#16233B" text-anchor="middle">Field Ops App</text>
-<text x="117.5" y="457.0" font-size="11.5" font-weight="600" fill="#16233B" text-anchor="middle">(field visits, PTPs)</text>
-<line x1="205" y1="445.0" x2="250" y2="250" stroke="445.0" stroke-width="1.6" marker-end="url(#arrow)"/>
-<rect x="250" y="200" width="155" height="90" rx="4" fill="#FFFFFF" stroke="#16233B" stroke-width="1.4"/>
-<text x="327.5" y="232.5" font-size="16" font-weight="600" fill="#16233B" text-anchor="middle">Raw</text>
-<text x="327.5" y="252.5" font-size="10.5" fill="#5B6778" text-anchor="middle">immutable landing,</text>
-<text x="327.5" y="265.5" font-size="10.5" fill="#5B6778" text-anchor="middle">partitioned by date</text>
-<rect x="432" y="200" width="155" height="90" rx="4" fill="#FFFFFF" stroke="#16233B" stroke-width="1.4"/>
-<text x="509.5" y="232.5" font-size="16" font-weight="600" fill="#16233B" text-anchor="middle">Staging</text>
-<text x="509.5" y="252.5" font-size="10.5" fill="#5B6778" text-anchor="middle">exact-dup + key</text>
-<text x="509.5" y="265.5" font-size="10.5" fill="#5B6778" text-anchor="middle">dedup only</text>
-<line x1="405" y1="245.0" x2="432" y2="245.0" stroke="#16233B" stroke-width="1.6" marker-end="url(#arrow)"/>
-<rect x="614" y="200" width="155" height="90" rx="4" fill="#FFFFFF" stroke="#16233B" stroke-width="1.4"/>
-<text x="691.5" y="232.5" font-size="16" font-weight="600" fill="#16233B" text-anchor="middle">Clean</text>
-<text x="691.5" y="252.5" font-size="10.5" fill="#5B6778" text-anchor="middle">entity resolution,</text>
-<text x="691.5" y="265.5" font-size="10.5" fill="#5B6778" text-anchor="middle">tz normalize</text>
-<line x1="587" y1="245.0" x2="614" y2="245.0" stroke="#16233B" stroke-width="1.6" marker-end="url(#arrow)"/>
-<rect x="796" y="200" width="155" height="90" rx="4" fill="#16233B" stroke="#16233B" stroke-width="1.4"/>
-<text x="873.5" y="232.5" font-size="16" font-weight="600" fill="#FFFFFF" text-anchor="middle">Golden</text>
-<text x="873.5" y="252.5" font-size="10.5" fill="#AFC0D6" text-anchor="middle">one trustworthy</text>
-<text x="873.5" y="265.5" font-size="10.5" fill="#AFC0D6" text-anchor="middle">table per entity</text>
-<line x1="769" y1="245.0" x2="796" y2="245.0" stroke="#16233B" stroke-width="1.6" marker-end="url(#arrow)"/>
-<rect x="978" y="200" width="155" height="90" rx="4" fill="#FFFFFF" stroke="#16233B" stroke-width="1.4"/>
-<text x="1055.5" y="232.5" font-size="16" font-weight="600" fill="#16233B" text-anchor="middle">Feature</text>
-<text x="1055.5" y="252.5" font-size="10.5" fill="#5B6778" text-anchor="middle">dpd_bucket, tenure,</text>
-<text x="1055.5" y="265.5" font-size="10.5" fill="#5B6778" text-anchor="middle">last-touch channel</text>
-<line x1="951" y1="245.0" x2="978" y2="245.0" stroke="#16233B" stroke-width="1.6" marker-end="url(#arrow)"/>
-<rect x="1160" y="200" width="155" height="90" rx="4" fill="#FFFFFF" stroke="#16233B" stroke-width="1.4"/>
-<text x="1237.5" y="232.5" font-size="16" font-weight="600" fill="#16233B" text-anchor="middle">Metrics</text>
-<text x="1237.5" y="252.5" font-size="10.5" fill="#5B6778" text-anchor="middle">versioned metric</text>
-<text x="1237.5" y="265.5" font-size="10.5" fill="#5B6778" text-anchor="middle">catalog, daily</text>
-<line x1="1133" y1="245.0" x2="1160" y2="245.0" stroke="#16233B" stroke-width="1.6" marker-end="url(#arrow)"/>
-<rect x="1342" y="200" width="155" height="90" rx="4" fill="#16233B" stroke="#16233B" stroke-width="1.4"/>
-<text x="1419.5" y="232.5" font-size="16" font-weight="600" fill="#FFFFFF" text-anchor="middle">Dashboard</text>
-<text x="1419.5" y="252.5" font-size="10.5" fill="#AFC0D6" text-anchor="middle">one-screen</text>
-<text x="1419.5" y="265.5" font-size="10.5" fill="#AFC0D6" text-anchor="middle">leadership view</text>
-<line x1="1315" y1="245.0" x2="1342" y2="245.0" stroke="#16233B" stroke-width="1.6" marker-end="url(#arrow)"/>
-<path d="M 205 141.0 C 190 141.0, 190 245.0, 250 245.0" fill="none" stroke="#B7C0CE" stroke-width="1.3" marker-end="url(#arrow)"/>
-<path d="M 205 217.0 C 190 217.0, 190 245.0, 250 245.0" fill="none" stroke="#B7C0CE" stroke-width="1.3" marker-end="url(#arrow)"/>
-<path d="M 205 293.0 C 190 293.0, 190 245.0, 250 245.0" fill="none" stroke="#B7C0CE" stroke-width="1.3" marker-end="url(#arrow)"/>
-<path d="M 205 369.0 C 190 369.0, 190 245.0, 250 245.0" fill="none" stroke="#B7C0CE" stroke-width="1.3" marker-end="url(#arrow)"/>
-<path d="M 205 445.0 C 190 445.0, 190 245.0, 250 245.0" fill="none" stroke="#B7C0CE" stroke-width="1.3" marker-end="url(#arrow)"/>
-<rect x="250" y="330" width="1247" height="46" rx="4" fill="#E7ECF2" stroke="#B7C0CE" stroke-width="1.4"/>
-<text x="873.5" y="347.0" font-size="13" font-weight="600" fill="#16233B" text-anchor="middle">Orchestration &amp; scheduling</text>
-<text x="873.5" y="367.0" font-size="10.5" fill="#5B6778" text-anchor="middle">daily incremental loads on event_at / updated_at watermarks</text>
-<line x1="327.5" y1="290" x2="327.5" y2="330" stroke="#B7C0CE" stroke-width="1.6" marker-end="none"/>
-<line x1="509.5" y1="290" x2="509.5" y2="330" stroke="#B7C0CE" stroke-width="1.6" marker-end="none"/>
-<line x1="691.5" y1="290" x2="691.5" y2="330" stroke="#B7C0CE" stroke-width="1.6" marker-end="none"/>
-<line x1="873.5" y1="290" x2="873.5" y2="330" stroke="#B7C0CE" stroke-width="1.6" marker-end="none"/>
-<line x1="1055.5" y1="290" x2="1055.5" y2="330" stroke="#B7C0CE" stroke-width="1.6" marker-end="none"/>
-<line x1="1237.5" y1="290" x2="1237.5" y2="330" stroke="#B7C0CE" stroke-width="1.6" marker-end="none"/>
-<line x1="1419.5" y1="290" x2="1419.5" y2="330" stroke="#B7C0CE" stroke-width="1.6" marker-end="none"/>
-<rect x="250" y="406" width="191.16666666666666" height="56" rx="4" fill="#FBF1DF" stroke="#B5791E" stroke-width="1.4"/>
-<text x="345.5833333333333" y="429.0" font-size="11" font-weight="600" fill="#7A5416" text-anchor="middle">Volume check</text>
-<text x="345.5833333333333" y="446.0" font-size="11" font-weight="600" fill="#7A5416" text-anchor="middle">(±20% WoW)</text>
-<rect x="461.16666666666663" y="406" width="191.16666666666666" height="56" rx="4" fill="#FBF1DF" stroke="#B5791E" stroke-width="1.4"/>
-<text x="556.75" y="429.0" font-size="11" font-weight="600" fill="#7A5416" text-anchor="middle">Key uniqueness</text>
-<text x="556.75" y="446.0" font-size="11" font-weight="600" fill="#7A5416" text-anchor="middle">(0 dup ids)</text>
-<rect x="672.3333333333333" y="406" width="191.16666666666666" height="56" rx="4" fill="#FBF1DF" stroke="#B5791E" stroke-width="1.4"/>
-<text x="767.9166666666666" y="429.0" font-size="11" font-weight="600" fill="#7A5416" text-anchor="middle">Referential</text>
-<text x="767.9166666666666" y="446.0" font-size="11" font-weight="600" fill="#7A5416" text-anchor="middle">integrity</text>
-<rect x="883.4999999999999" y="406" width="191.16666666666666" height="56" rx="4" fill="#FBF1DF" stroke="#B5791E" stroke-width="1.4"/>
-<text x="979.0833333333333" y="429.0" font-size="11" font-weight="600" fill="#7A5416" text-anchor="middle">Distribution drift</text>
-<text x="979.0833333333333" y="446.0" font-size="11" font-weight="600" fill="#7A5416" text-anchor="middle">(PSI vs 3mo avg)</text>
-<rect x="1094.6666666666665" y="406" width="191.16666666666666" height="56" rx="4" fill="#FBF1DF" stroke="#B5791E" stroke-width="1.4"/>
-<text x="1190.2499999999998" y="429.0" font-size="11" font-weight="600" fill="#7A5416" text-anchor="middle">Metric sanity</text>
-<text x="1190.2499999999998" y="446.0" font-size="11" font-weight="600" fill="#7A5416" text-anchor="middle">bounds</text>
-<rect x="1305.8333333333333" y="406" width="191.16666666666666" height="56" rx="4" fill="#FBF1DF" stroke="#B5791E" stroke-width="1.4"/>
-<text x="1401.4166666666665" y="429.0" font-size="11" font-weight="600" fill="#7A5416" text-anchor="middle">Calendar-</text>
-<text x="1401.4166666666665" y="446.0" font-size="11" font-weight="600" fill="#7A5416" text-anchor="middle">normalization check</text>
-<text x="250" y="396" font-size="12.5" fill="#7A5416" text-anchor="start" font-weight="600" >Data-quality gates (run after every Staging &#8594; Clean load, before Clean &#8594; Golden promotion)</text>
-<line x1="691.5" y1="376" x2="691.5" y2="406" stroke="#B5791E" stroke-width="1.6" marker-end="none" stroke-dasharray="3,3"/>
-<line x1="873.5" y1="376" x2="873.5" y2="406" stroke="#B5791E" stroke-width="1.6" marker-end="none" stroke-dasharray="3,3"/>
-<line x1="1237.5" y1="376" x2="1237.5" y2="406" stroke="#B5791E" stroke-width="1.6" marker-end="none" stroke-dasharray="3,3"/>
-<rect x="250" y="488" width="460" height="60" rx="4" fill="#FFFFFF" stroke="#16233B" stroke-width="1.4"/>
-<text x="480.0" y="505.5" font-size="13" font-weight="600" fill="#16233B" text-anchor="middle">Anomaly detection</text>
-<text x="480.0" y="525.5" font-size="11" fill="#5B6778" text-anchor="middle">rolling 8-week mean/SD per metric; >2.5σ daily move</text>
-<text x="480.0" y="538.5" font-size="11" fill="#5B6778" text-anchor="middle">alerts on-call with contributing dimension attached</text>
-<line x1="480" y1="462" x2="480" y2="488" stroke="#B5791E" stroke-width="1.6" marker-end="url(#arrowTeal)"/>
-<rect x="750.0" y="488" width="235.66666666666666" height="60" rx="4" fill="#E7F1EE" stroke="#2F6F62" stroke-width="1.4"/>
-<text x="867.8333333333334" y="512.0" font-size="12.5" font-weight="600" fill="#1D4A40" text-anchor="middle">Executive Dashboard</text>
-<text x="867.8333333333334" y="532.0" font-size="10" fill="#5B6778" text-anchor="middle">refreshed daily, one screen</text>
-<rect x="1005.6666666666666" y="488" width="235.66666666666666" height="60" rx="4" fill="#E7F1EE" stroke="#2F6F62" stroke-width="1.4"/>
-<text x="1123.5" y="512.0" font-size="12.5" font-weight="600" fill="#1D4A40" text-anchor="middle">Ops Alerting</text>
-<text x="1123.5" y="532.0" font-size="10" fill="#5B6778" text-anchor="middle">Slack / email on anomaly</text>
-<rect x="1261.3333333333333" y="488" width="235.66666666666666" height="60" rx="4" fill="#E7F1EE" stroke="#2F6F62" stroke-width="1.4"/>
-<text x="1379.1666666666665" y="512.0" font-size="12.5" font-weight="600" fill="#1D4A40" text-anchor="middle">Analyst access</text>
-<text x="1379.1666666666665" y="532.0" font-size="10" fill="#5B6778" text-anchor="middle">golden tables + SQL/notebook</text>
-<line x1="1419.5" y1="290" x2="1419.5" y2="474" stroke="#2F6F62" stroke-width="1.6" marker-end="url(#arrow)"/>
-<line x1="1419.5" y1="474" x2="1123.5" y2="474" stroke="#2F6F62" stroke-width="1.6" marker-end="url(#arrow)"/>
-<line x1="1123.5" y1="474" x2="1123.5" y2="488" stroke="#2F6F62" stroke-width="1.6" marker-end="url(#arrow)"/>
-<text x="250" y="578" font-size="12" fill="#16233B" text-anchor="start" font-weight="400" >Lineage: every Golden-layer row carries _source_table, _pipeline_run_id, _cleaning_rule_version — any dashboard number traces back to its raw rows and cleaning decision.</text>
-<text x="250" y="600" font-size="12" fill="#16233B" text-anchor="start" font-weight="400" >Late-arriving data: Golden partitions stay open 48h before finalizing; upsert-by-id (not append-only) so a late call_disposition still attaches to its call.</text>
-<text x="250" y="622" font-size="12" fill="#16233B" text-anchor="start" font-weight="400" >Backfills: a changed cleaning rule re-runs Staging &#8594; Golden for the affected date range; it never patches Golden directly, or lineage breaks.</text>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.42.4 (0)
+ -->
+<!-- Title: architecture Pages: 1 -->
+<svg width="1077pt" height="186pt"
+ viewBox="0.00 0.00 1077.00 186.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 182)">
+<title>architecture</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-182 1073,-182 1073,4 -4,4"/>
+<!-- raw -->
+<g id="node1" class="node">
+<title>raw</title>
+<path fill="#e8eef7" stroke="black" d="M79,-51C79,-51 12,-51 12,-51 6,-51 0,-45 0,-39 0,-39 0,-23 0,-23 0,-17 6,-11 12,-11 12,-11 79,-11 79,-11 85,-11 91,-17 91,-23 91,-23 91,-39 91,-39 91,-45 85,-51 79,-51"/>
+<text text-anchor="middle" x="45.5" y="-34" font-family="Arial" font-size="10.00">RAW</text>
+<text text-anchor="middle" x="45.5" y="-23" font-family="Arial" font-size="10.00">17 CSV sources</text>
+</g>
+<!-- staging -->
+<g id="node2" class="node">
+<title>staging</title>
+<path fill="#f4f6f8" stroke="black" d="M248,-62C248,-62 146,-62 146,-62 140,-62 134,-56 134,-50 134,-50 134,-12 134,-12 134,-6 140,0 146,0 146,0 248,0 248,0 254,0 260,-6 260,-12 260,-12 260,-50 260,-50 260,-56 254,-62 248,-62"/>
+<text text-anchor="middle" x="197" y="-45" font-family="Arial" font-size="10.00">STAGING</text>
+<text text-anchor="middle" x="197" y="-34" font-family="Arial" font-size="10.00">Schema normalization</text>
+<text text-anchor="middle" x="197" y="-23" font-family="Arial" font-size="10.00">Source keys + contracts</text>
+<text text-anchor="middle" x="197" y="-12" font-family="Arial" font-size="10.00">Timestamp parsing</text>
+</g>
+<!-- raw&#45;&gt;staging -->
+<g id="edge1" class="edge">
+<title>raw&#45;&gt;staging</title>
+<path fill="none" stroke="black" d="M91.37,-31C91.37,-31 123.96,-31 123.96,-31"/>
+<polygon fill="black" stroke="black" points="123.96,-34.5 133.96,-31 123.96,-27.5 123.96,-34.5"/>
+</g>
+<!-- clean -->
+<g id="node3" class="node">
+<title>clean</title>
+<path fill="#f4f6f8" stroke="black" d="M413,-110.5C413,-110.5 315,-110.5 315,-110.5 309,-110.5 303,-104.5 303,-98.5 303,-98.5 303,-49.5 303,-49.5 303,-43.5 309,-37.5 315,-37.5 315,-37.5 413,-37.5 413,-37.5 419,-37.5 425,-43.5 425,-49.5 425,-49.5 425,-98.5 425,-98.5 425,-104.5 419,-110.5 413,-110.5"/>
+<text text-anchor="middle" x="364" y="-93.5" font-family="Arial" font-size="10.00">CLEAN</text>
+<text text-anchor="middle" x="364" y="-82.5" font-family="Arial" font-size="10.00">Exact dedupe</text>
+<text text-anchor="middle" x="364" y="-71.5" font-family="Arial" font-size="10.00">Legacy&#45;code mapping</text>
+<text text-anchor="middle" x="364" y="-60.5" font-family="Arial" font-size="10.00">Entity flags</text>
+<text text-anchor="middle" x="364" y="-49.5" font-family="Arial" font-size="10.00">Timezone normalization</text>
+</g>
+<!-- staging&#45;&gt;clean -->
+<g id="edge2" class="edge">
+<title>staging&#45;&gt;clean</title>
+<path fill="none" stroke="black" d="M260.14,-49.75C260.14,-49.75 292.99,-49.75 292.99,-49.75"/>
+<polygon fill="black" stroke="black" points="292.99,-53.25 302.99,-49.75 292.99,-46.25 292.99,-53.25"/>
+</g>
+<!-- golden -->
+<g id="node4" class="node">
+<title>golden</title>
+<path fill="#e8f1e8" stroke="black" d="M567,-165C567,-165 480,-165 480,-165 474,-165 468,-159 468,-153 468,-153 468,-115 468,-115 468,-109 474,-103 480,-103 480,-103 567,-103 567,-103 573,-103 579,-109 579,-115 579,-115 579,-153 579,-153 579,-159 573,-165 567,-165"/>
+<text text-anchor="middle" x="523.5" y="-148" font-family="Arial" font-size="10.00">GOLDEN</text>
+<text text-anchor="middle" x="523.5" y="-137" font-family="Arial" font-size="10.00">Audited payments</text>
+<text text-anchor="middle" x="523.5" y="-126" font-family="Arial" font-size="10.00">Account&#45;month spine</text>
+<text text-anchor="middle" x="523.5" y="-115" font-family="Arial" font-size="10.00">Trusted event time</text>
+</g>
+<!-- clean&#45;&gt;golden -->
+<g id="edge3" class="edge">
+<title>clean&#45;&gt;golden</title>
+<path fill="none" stroke="black" d="M425.21,-106.75C425.21,-106.75 457.94,-106.75 457.94,-106.75"/>
+<polygon fill="black" stroke="black" points="457.94,-110.25 467.94,-106.75 457.94,-103.25 457.94,-110.25"/>
+</g>
+<!-- feature -->
+<g id="node5" class="node">
+<title>feature</title>
+<path fill="#f4f6f8" stroke="black" d="M724,-168C724,-168 634,-168 634,-168 628,-168 622,-162 622,-156 622,-156 622,-118 622,-118 622,-112 628,-106 634,-106 634,-106 724,-106 724,-106 730,-106 736,-112 736,-118 736,-118 736,-156 736,-156 736,-162 730,-168 724,-168"/>
+<text text-anchor="middle" x="679" y="-151" font-family="Arial" font-size="10.00">FEATURE</text>
+<text text-anchor="middle" x="679" y="-140" font-family="Arial" font-size="10.00">DPD / risk / loan type</text>
+<text text-anchor="middle" x="679" y="-129" font-family="Arial" font-size="10.00">Targeting / channel</text>
+<text text-anchor="middle" x="679" y="-118" font-family="Arial" font-size="10.00">Agent&#45;hour features</text>
+</g>
+<!-- golden&#45;&gt;feature -->
+<g id="edge4" class="edge">
+<title>golden&#45;&gt;feature</title>
+<path fill="none" stroke="black" d="M579.2,-135.5C579.2,-135.5 611.86,-135.5 611.86,-135.5"/>
+<polygon fill="black" stroke="black" points="611.86,-139 621.86,-135.5 611.86,-132 611.86,-139"/>
+</g>
+<!-- metrics -->
+<g id="node6" class="node">
+<title>metrics</title>
+<path fill="#fff2cc" stroke="black" d="M881,-176.5C881,-176.5 791,-176.5 791,-176.5 785,-176.5 779,-170.5 779,-164.5 779,-164.5 779,-115.5 779,-115.5 779,-109.5 785,-103.5 791,-103.5 791,-103.5 881,-103.5 881,-103.5 887,-103.5 893,-109.5 893,-115.5 893,-115.5 893,-164.5 893,-164.5 893,-170.5 887,-176.5 881,-176.5"/>
+<text text-anchor="middle" x="836" y="-159.5" font-family="Arial" font-size="10.00">METRICS</text>
+<text text-anchor="middle" x="836" y="-148.5" font-family="Arial" font-size="10.00">Recovery cash / yield</text>
+<text text-anchor="middle" x="836" y="-137.5" font-family="Arial" font-size="10.00">RPC / PTP / kept</text>
+<text text-anchor="middle" x="836" y="-126.5" font-family="Arial" font-size="10.00">Channel conversion</text>
+<text text-anchor="middle" x="836" y="-115.5" font-family="Arial" font-size="10.00">DQ metrics</text>
+</g>
+<!-- feature&#45;&gt;metrics -->
+<g id="edge5" class="edge">
+<title>feature&#45;&gt;metrics</title>
+<path fill="none" stroke="black" d="M736.12,-137C736.12,-137 768.92,-137 768.92,-137"/>
+<polygon fill="black" stroke="black" points="768.92,-140.5 778.92,-137 768.92,-133.5 768.92,-140.5"/>
+</g>
+<!-- dash -->
+<g id="node7" class="node">
+<title>dash</title>
+<path fill="#e8eef7" stroke="black" d="M1057,-178C1057,-178 948,-178 948,-178 942,-178 936,-172 936,-166 936,-166 936,-128 936,-128 936,-122 942,-116 948,-116 948,-116 1057,-116 1057,-116 1063,-116 1069,-122 1069,-128 1069,-128 1069,-166 1069,-166 1069,-172 1063,-178 1057,-178"/>
+<text text-anchor="middle" x="1002.5" y="-161" font-family="Arial" font-size="10.00">DASHBOARD + ALERTS</text>
+<text text-anchor="middle" x="1002.5" y="-150" font-family="Arial" font-size="10.00">CEO scorecard</text>
+<text text-anchor="middle" x="1002.5" y="-139" font-family="Arial" font-size="10.00">Anomaly detection</text>
+<text text-anchor="middle" x="1002.5" y="-128" font-family="Arial" font-size="10.00">Decision log</text>
+</g>
+<!-- metrics&#45;&gt;dash -->
+<g id="edge6" class="edge">
+<title>metrics&#45;&gt;dash</title>
+<path fill="none" stroke="black" d="M893.3,-146.25C893.3,-146.25 925.93,-146.25 925.93,-146.25"/>
+<polygon fill="black" stroke="black" points="925.93,-149.75 935.93,-146.25 925.93,-142.75 925.93,-149.75"/>
+</g>
+<!-- ops -->
+<g id="node8" class="node">
+<title>ops</title>
+<path fill="#f4f6f8" stroke="black" d="M1042,-83.5C1042,-83.5 963,-83.5 963,-83.5 957,-83.5 951,-77.5 951,-71.5 951,-71.5 951,-22.5 951,-22.5 951,-16.5 957,-10.5 963,-10.5 963,-10.5 1042,-10.5 1042,-10.5 1048,-10.5 1054,-16.5 1054,-22.5 1054,-22.5 1054,-71.5 1054,-71.5 1054,-77.5 1048,-83.5 1042,-83.5"/>
+<text text-anchor="middle" x="1002.5" y="-66.5" font-family="Arial" font-size="10.00">OPERATIONS</text>
+<text text-anchor="middle" x="1002.5" y="-55.5" font-family="Arial" font-size="10.00">Incremental loads</text>
+<text text-anchor="middle" x="1002.5" y="-44.5" font-family="Arial" font-size="10.00">Late&#45;arrival window</text>
+<text text-anchor="middle" x="1002.5" y="-33.5" font-family="Arial" font-size="10.00">Backfills</text>
+<text text-anchor="middle" x="1002.5" y="-22.5" font-family="Arial" font-size="10.00">DQ gates + lineage</text>
+</g>
+<!-- metrics&#45;&gt;ops -->
+<g id="edge9" class="edge">
+<title>metrics&#45;&gt;ops</title>
+<path fill="none" stroke="black" d="M893,-109.75C941.38,-109.75 1003,-109.75 1003,-109.75 1003,-109.75 1003,-93.5 1003,-93.5"/>
+<polygon fill="black" stroke="black" points="1006.5,-93.5 1003,-83.5 999.5,-93.5 1006.5,-93.5"/>
+<text text-anchor="middle" x="927.63" y="-98.55" font-family="Times,serif" font-size="14.00">monitor</text>
+</g>
+<!-- ops&#45;&gt;staging -->
+<g id="edge7" class="edge">
+<title>ops&#45;&gt;staging</title>
+<path fill="none" stroke="black" d="M950.89,-24C950.89,-24 270.14,-24 270.14,-24"/>
+<polygon fill="black" stroke="black" points="270.14,-20.5 260.14,-24 270.14,-27.5 270.14,-20.5"/>
+<text text-anchor="middle" x="581.52" y="-12.8" font-family="Times,serif" font-size="14.00">controls</text>
+</g>
+<!-- ops&#45;&gt;clean -->
+<g id="edge8" class="edge">
+<title>ops&#45;&gt;clean</title>
+<path fill="none" stroke="black" d="M950.79,-60.5C950.79,-60.5 435.45,-60.5 435.45,-60.5"/>
+<polygon fill="black" stroke="black" points="435.45,-57 425.45,-60.5 435.45,-64 435.45,-57"/>
+<text text-anchor="middle" x="658.12" y="-49.3" font-family="Times,serif" font-size="14.00">reprocess</text>
+</g>
+</g>
 </svg>

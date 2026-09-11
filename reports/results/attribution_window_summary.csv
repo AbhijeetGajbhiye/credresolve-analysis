@@ -1,0 +1,2 @@
+audited_payments_with_last_touch,within_7d_pct,median_lag_hours,p90_lag_hours,voice_share_pct,whatsapp_share_pct,sms_share_pct,field_share_pct,interpretation
+10747,23.38326974969759,432.1897222222222,1358.8446111111111,41.100147260536076,27.15475025611901,20.57627970386527,11.168822779479632,Last-touch timing is descriptive attribution only; channel causality is not established.

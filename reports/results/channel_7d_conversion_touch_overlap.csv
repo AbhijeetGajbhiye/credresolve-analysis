@@ -1,0 +1,5 @@
+channel,unique_touches,touches_with_7d_audited_payment,cash_within_7d,7d_touch_conversion,attribution
+FIELD,11365,125,9255757.2,0.010998680158380994,overlapping touch-level diagnostic; one payment may qualify for multiple touches
+SMS,11221,148,11202935.34,0.013189555298101773,overlapping touch-level diagnostic; one payment may qualify for multiple touches
+VOICE,11202,167,12890030.18,0.01490805213354758,overlapping touch-level diagnostic; one payment may qualify for multiple touches
+WHATSAPP,11212,142,10924622.93,0.012665001783803068,overlapping touch-level diagnostic; one payment may qualify for multiple touches

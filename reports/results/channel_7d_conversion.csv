@@ -1,0 +1,5 @@
+channel,unique_touches,touches_with_7d_audited_payment,cash_within_7d,7d_touch_conversion,attribution
+FIELD,10265,111,8187442.6,0.010813443740867025,mutually exclusive first targeting touch per account-month; target day excluded
+SMS,10171,132,10116347.41,0.012978074918887032,mutually exclusive first targeting touch per account-month; target day excluded
+VOICE,10086,153,11666823.92,0.015169541939321832,mutually exclusive first targeting touch per account-month; target day excluded
+WHATSAPP,10188,128,10229367.82,0.012563800549666274,mutually exclusive first targeting touch per account-month; target day excluded

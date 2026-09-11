@@ -1,0 +1,9 @@
+month,all_accounts_master,targeted_accounts,audited_payers,targeted_share_of_master,payer_share_of_master,denominator_definition
+2026-01,30000,5732,1711,0.19106666666666666,0.05703333333333333,All-account recovery uses audited payments; targeted yield uses targeted principal; no success-only denominator.
+2026-02,30000,5160,1566,0.172,0.0522,All-account recovery uses audited payments; targeted yield uses targeted principal; no success-only denominator.
+2026-03,30000,5666,1752,0.18886666666666665,0.0584,All-account recovery uses audited payments; targeted yield uses targeted principal; no success-only denominator.
+2026-04,30000,5585,1652,0.18616666666666667,0.05506666666666667,All-account recovery uses audited payments; targeted yield uses targeted principal; no success-only denominator.
+2026-05,30000,5800,1696,0.19333333333333333,0.05653333333333333,All-account recovery uses audited payments; targeted yield uses targeted principal; no success-only denominator.
+2026-06,30000,5535,1667,0.1845,0.05556666666666667,All-account recovery uses audited payments; targeted yield uses targeted principal; no success-only denominator.
+2026-07,30000,5666,1650,0.18886666666666665,0.055,All-account recovery uses audited payments; targeted yield uses targeted principal; no success-only denominator.
+2026-08,30000,1566,447,0.0522,0.0149,All-account recovery uses audited payments; targeted yield uses targeted principal; no success-only denominator.

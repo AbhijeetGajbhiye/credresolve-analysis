@@ -1,0 +1,11 @@
+metric,value,unit
+july_first_targeted_accounts,5666.0,count
+pre7_payer_rate,0.012883868690434168,rate
+post7_payer_rate,0.01323685139428168,rate
+timing_aligned_pre_post_lift_pp,0.03529827038475115,percentage_points
+pre7_avg_cash_per_targeted_account,1060.624034592305,INR
+post7_avg_cash_per_targeted_account,1045.0867525591248,INR
+timing_aligned_cash_change_per_account,-15.53728203318019,INR
+treated_accounts_with_pre_target_july_payment,166.0,count
+treated_accounts_with_pre_target_july_payment_pct,0.02929756441934345,rate
+target_day_excluded_entirely,1.0,flag

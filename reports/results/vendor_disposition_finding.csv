@@ -1,0 +1,2 @@
+finding,max_monthly_version_mix_spread_pp,rpc_code_share_min_pct,rpc_code_share_max_pct,conclusion
+Disposition-version temporal stability,7.488986784140971,65.34954407294833,66.98357821953329,No distributional break is evident after version-normalized grouping; semantic equivalence across versions cannot be conclusively established without an authoritative vendor disposition dictionary.

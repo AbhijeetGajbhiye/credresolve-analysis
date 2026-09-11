@@ -1,0 +1,2 @@
+estimate_pp,ci_low_pp,ci_high_pp,method,causal
+0.03529827038475115,-0.37063183903988706,0.45887751500176494,"paired bootstrap, 5,000 resamples, target day excluded",False

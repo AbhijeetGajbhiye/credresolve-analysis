@@ -1,0 +1,4 @@
+dimension,available,treatment
+language,NO,No language field exists in supplied schemas; do not proxy with state/city.
+client,NO,No client/lender field exists in supplied schemas; cannot evaluate client effects.
+agent_tenure,NO,"Agent identities conflict across all 1,000 agent IDs; tenure cannot be reliably attached to event history."

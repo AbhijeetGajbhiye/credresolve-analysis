@@ -1,0 +1,8 @@
+metric,value
+jan_observed_yield,0.010715153115812467
+jul_observed_yield,0.011917993734282152
+observed_change_pp,0.12028406184696853
+jan_common_cohort_standardized_yield,0.010710553652949513
+jul_common_cohort_standardized_yield,0.01191799373428215
+common_cohort_change_pp,0.12074400813326375
+common_cohorts_included,"0-29, 180-364, 30-59, 60-89, 90-179"
