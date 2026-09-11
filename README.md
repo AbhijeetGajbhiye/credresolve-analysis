@@ -56,10 +56,3 @@ The notebook resolves `raw/`, `golden_dataset/`, and `reports/results/` relative
 ## Decision framing
 
 The historical timing-aligned pre/post result is descriptive only. Because `target_date` is date-only, the entire target day is excluded; the comparison uses seven full calendar days before versus seven full days after. It is not treated as causal incremental recovery. The investment case therefore uses a randomized targeting pilot with a 5-10% holdout and a break-even payer-lift hurdle based on targeted-population payer economics. The experiment uses **30-day payer rate as the primary statistical endpoint** and **30-day cash per eligible account as the financial decision metric**; the SQL, power calculation and memo all use this same hierarchy. This preserves the assignment's requirement to separate fact, evidence, correlation, and hypothesis.
-
-
-## Senior-review QA
-The repository includes explicit metric governance, statistical investigation, production contracts/lineage, assignment coverage, and clean-clone smoke testing. `run_pipeline.py` rebuilds every material `reports/results` artifact; `build_account_month.py` separately regenerates the heavy `golden_account_month.csv.gz` artifact. Large raw/golden CSV assets are stored as `.csv.gz` to remain comfortably below GitHub single-file limits. The supplied data contains 8 observed calendar months (7 complete months plus partial August), not a full 12-month history; no 12-month trend or annual seasonality claim is fabricated.
-
-## GitHub-friendly data packaging
-Large raw/golden datasets are stored as gzip-compressed `.csv.gz` files to stay well below GitHub's 100 MB per-file limit. The pipeline's `data_io.py` transparently reads either `.csv` or `.csv.gz`, so the analytical code does not require manual decompression. The generated SQLite build database is intentionally excluded from the repository because it is a derived artifact and is rebuilt locally by `run_pipeline.py`.
