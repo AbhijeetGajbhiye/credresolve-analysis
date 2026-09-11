@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CredResolve — Recovery Performance, One Screen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="chart.umd.js"></script>
+<style>
+  :root{
+    --ink:#16233B; --paper:#F2F4F7; --panel:#FFFFFF; --line:#D8DEE7;
+    --amber:#B5791E; --amber-bg:#FBF1DF; --teal:#2F6F62; --teal-bg:#E7F1EE;
+    --muted:#5B6778;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);
+    font-family:'IBM Plex Sans',sans-serif; height:100%;}
+  .wrap{max-width:1400px;margin:0 auto;padding:28px 32px 20px;}
+  .masthead{display:flex;justify-content:space-between;align-items:baseline;
+    border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:20px;}
+  .masthead h1{font-family:'Newsreader',serif;font-weight:600;font-size:22px;margin:0;}
+  .masthead .meta{font-size:13px;color:var(--muted);}
+  .hero{display:grid;grid-template-columns:1.15fr 0.85fr;gap:28px;
+    background:var(--panel);border:1px solid var(--line);border-radius:4px;
+    padding:26px 30px;margin-bottom:22px;}
+  .hero .verdict{font-family:'Newsreader',serif;font-size:27px;line-height:1.32;font-weight:400;}
+  .hero .verdict em{font-style:italic;color:var(--amber);}
+  .hero .verdict .sub{font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;
+    color:var(--muted);margin-top:12px;line-height:1.5;}
+  .compare{display:flex;gap:22px;align-items:center;justify-content:center;}
+  .figure{text-align:center;}
+  .figure .num{font-family:'IBM Plex Mono',monospace;font-size:38px;font-weight:600;}
+  .figure .num.warn{color:var(--amber);}
+  .figure .num.calm{color:var(--teal);}
+  .figure .cap{font-size:12.5px;color:var(--muted);margin-top:4px;max-width:150px;}
+  .vs{font-family:'Newsreader',serif;font-style:italic;color:var(--muted);font-size:15px;}
+
+  .grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:20px;}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:20px 22px;}
+  .panel h2{font-size:13.5px;font-weight:600;margin:0 0 14px;color:var(--ink);}
+  .panel h2 .tag{font-size:11px;font-weight:500;color:var(--muted);margin-left:6px;}
+  canvas{max-height:190px;}
+
+  .metric-row{display:flex;justify-content:space-between;align-items:center;
+    padding:9px 0;border-bottom:1px dashed var(--line);}
+  .metric-row:last-child{border-bottom:none;}
+  .metric-row .label{font-size:13px;color:var(--ink);}
+  .metric-row .range{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--teal);}
+  .flatline{width:64px;height:16px;vertical-align:middle;margin-left:8px;}
+
+  .coverage-num{font-family:'IBM Plex Mono',monospace;font-size:44px;font-weight:600;
+    color:var(--amber);line-height:1;}
+  .coverage-sub{font-size:13px;color:var(--muted);margin-top:6px;line-height:1.5;}
+  .coverage-bar{height:10px;border-radius:2px;background:var(--teal-bg);overflow:hidden;
+    margin:16px 0 8px;display:flex;}
+  .coverage-bar .worked{background:var(--teal);}
+  .coverage-bar .untouched{background:var(--amber);}
+  .legend{display:flex;gap:16px;font-size:12px;color:var(--muted);}
+  .legend span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;
+    margin-right:5px;position:relative;top:1px;}
+  .legend .l1::before{background:var(--teal);}
+  .legend .l2::before{background:var(--amber);}
+
+  .footer{margin-top:22px;background:var(--ink);color:#fff;border-radius:4px;
+    padding:20px 30px;display:flex;justify-content:space-between;align-items:center;gap:24px;}
+  .footer .rec{font-family:'Newsreader',serif;font-size:18px;max-width:640px;line-height:1.4;}
+  .footer .rec b{color:#F2C879;font-weight:600;}
+  .footer .stats{display:flex;gap:30px;}
+  .footer .stats div{text-align:center;}
+  .footer .stats .n{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:600;}
+  .footer .stats .l{font-size:11px;color:#B8C2D4;margin-top:2px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <h1>Collections Recovery — Executive View</h1>
+    <div class="meta">Jan – Jul 2026 &nbsp;·&nbsp; refreshed from golden dataset &nbsp;·&nbsp; one screen, ~60 seconds</div>
+  </div>
+
+  <div class="hero">
+    <div class="verdict">
+      Recovery has been <em>flat</em> all year. The reported 11% month-on-month
+      gain was February having three fewer days than March.
+      <div class="sub">Every metric we rebuilt from raw event data (contact rate, right-party-contact
+      rate, promise-to-pay rate, promise-kept rate, recovery per account) moved in a narrow band
+      from January through July, with no sustained trend in either direction.</div>
+    </div>
+    <div class="compare">
+      <div class="figure">
+        <div class="num warn">+11.0%</div>
+        <div class="cap">Feb → Mar, raw monthly total (as reported)</div>
+      </div>
+      <div class="vs">vs.</div>
+      <div class="figure">
+        <div class="num calm">+0.3%</div>
+        <div class="cap">Feb → Mar, recovery per day (normalized)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <h2>Recovery per day <span class="tag">₹M / day, Jan–Jul</span></h2>
+      <canvas id="trendChart"></canvas>
+    </div>
+
+    <div class="panel">
+      <h2>Redefined metrics <span class="tag">range across 7 months</span></h2>
+      <div class="metric-row"><span class="label">Contact rate</span><span class="range">19.3 – 20.4%</span></div>
+      <div class="metric-row"><span class="label">Right-party contact</span><span class="range">76.3 – 78.0%</span></div>
+      <div class="metric-row"><span class="label">Promise-to-pay rate</span><span class="range">65.0 – 69.4%</span></div>
+      <div class="metric-row"><span class="label">Promise kept rate</span><span class="range">48.5 – 50.7%</span></div>
+      <div class="metric-row"><span class="label">Recovery / account</span><span class="range">₹31.4k – 33.3k</span></div>
+      <div class="metric-row"><span class="label">Recovery / agent-hour</span><span class="range">₹16.1k – 17.0k</span></div>
+    </div>
+
+    <div class="panel">
+      <h2>The real finding <span class="tag">portfolio coverage</span></h2>
+      <div class="coverage-num">22.2%</div>
+      <div class="coverage-sub">6,656 of 30,000 accounts (₹231 Cr outstanding) have <b>never</b>
+      been assigned to any collection activity, despite matching the worked book on
+      risk mix, DPD, and balance.</div>
+      <div class="coverage-bar">
+        <div class="worked" style="width:77.8%"></div>
+        <div class="untouched" style="width:22.2%"></div>
+      </div>
+      <div class="legend"><span class="l1">Worked (77.8%)</span><span class="l2">Untouched (22.2%)</span></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="rec">Recommendation: deploy the <b>₹10 Cr in AI voice automation</b>,
+    aimed first at the untouched 22% of the book. Validate with a 60–90 day pilot
+    before full commitment.</div>
+    <div class="stats">
+      <div><div class="n">₹15–25 Cr</div><div class="l">incremental recovery / yr</div></div>
+      <div><div class="n">150–250%</div><div class="l">year-1 ROI</div></div>
+      <div><div class="n">3–4 mo</div><div class="l">break-even</div></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const ctx = document.getElementById('trendChart');
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul'],
+    datasets: [{
+      label: '₹M / day',
+      data: [6.040, 6.077, 6.094, 5.838, 5.944, 5.852, 6.040],
+      backgroundColor: '#2F6F62',
+      borderRadius: 2,
+      barPercentage: 0.55,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { min: 5.5, max: 6.3, ticks: { font: { family: 'IBM Plex Mono', size: 10 } },
+           grid: { color: '#E4E9F0' } },
+      x: { ticks: { font: { family: 'IBM Plex Sans', size: 11 } }, grid: { display: false } }
+    }
+  }
+});
+</script>
+</body>
+</html>

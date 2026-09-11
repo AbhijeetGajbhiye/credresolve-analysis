@@ -1,0 +1,6 @@
+credresolve.db
+*.pyc
+__pycache__/
+.ipynb_checkpoints/
+*_preview.png
+node_modules/
